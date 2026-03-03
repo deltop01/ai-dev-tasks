@@ -1,0 +1,11 @@
+{
+  "name": "script-to-episode-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Interactive app + CLI to convert voiceover scripts into Remotion-ready episode JSON.",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "convert": "node src/cli.js"
+  }
+}

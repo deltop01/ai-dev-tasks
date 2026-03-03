@@ -128,3 +128,28 @@ Please feel free to:
 ---
 
 Happy AI-assisted developing!
+
+## Script to Episode JSON App
+
+This repo now includes a ready-to-run app for converting a narration script into Remotion-ready Episode JSON.
+
+### Run the app (web UI)
+
+```bash
+npm install
+npm start
+```
+
+Open `http://localhost:3000`, paste your script, and click **Convert**.
+
+### Run from CLI
+
+```bash
+node src/cli.js --episodeId ep001 --title "I Lost $2 Million Before 30" --script ./script.txt --out ./ep001.json
+```
+
+Or pipe from stdin:
+
+```bash
+cat script.txt | node src/cli.js --episodeId ep001 --title "..." --out ./ep001.json
+```

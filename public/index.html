@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Script → Episode JSON</title>
+    <style>
+      body { font-family: Inter, system-ui, sans-serif; margin: 0; background: #111; color: #f2f2f2; }
+      .container { max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
+      textarea, input { width: 100%; box-sizing: border-box; border: 1px solid #444; background: #1f1f1f; color: #fff; border-radius: 8px; padding: 10px; }
+      textarea { min-height: 220px; resize: vertical; }
+      .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+      button { background: #2c7be5; color: #fff; border: 0; border-radius: 8px; padding: 10px 14px; font-weight: 600; cursor: pointer; }
+      pre { background: #1b1b1b; border: 1px solid #333; border-radius: 8px; padding: 12px; overflow-x: auto; max-height: 420px; }
+      .muted { color: #aaa; }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Script → Episode JSON</h1>
+      <p class="muted">Paste your script, edit metadata, then click Convert. Copy the JSON output into your Remotion pipeline.</p>
+
+      <div class="grid">
+        <div><label>Episode ID</label><input id="episodeId" value="ep001" /></div>
+        <div><label>Title</label><input id="title" value="Untitled Episode" /></div>
+      </div>
+
+      <label>Script</label>
+      <textarea id="script" placeholder="Paste your voiceover script here..."></textarea>
+      <br /><br />
+      <button id="convertBtn">Convert</button>
+
+      <h3>Output JSON</h3>
+      <pre id="output">{}</pre>
+    </div>
+
+    <script>
+      const output = document.getElementById('output');
+      document.getElementById('convertBtn').addEventListener('click', async () => {
+        output.textContent = 'Converting...';
+        const payload = {
+          episodeId: document.getElementById('episodeId').value,
+          title: document.getElementById('title').value,
+          script: document.getElementById('script').value
+        };
+
+        const response = await fetch('/api/convert', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await response.json();
+
+        if (!response.ok || !data.ok) {
+          output.textContent = `Error: ${data.error || 'Unknown error'}`;
+          return;
+        }
+
+        output.textContent = JSON.stringify(data.episode, null, 2);
+      });
+    </script>
+  </body>
+</html>
